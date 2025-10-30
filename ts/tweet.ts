@@ -30,13 +30,15 @@ class Tweet {
     //returns a boolean, whether the text includes any content written by the person tweeting.
     get written():boolean {
         //TODO: identify whether the tweet is written
-        if (this.source !== 'completed_event') return false;
+        if (this.source !== 'completed_event') {
+            return false
+        }
 
         let cleaned = this.text
-        .replace(/#RunKeeper/gi, '')
-        .replace(/https?:\/\/\S+/gi,'')
-        .replace(/@runkeeper/gi,'')
-        .trim();
+            .replace(/#RunKeeper/gi, '')
+            .replace(/https?:\/\/\S+/gi,'')
+            .replace(/@runkeeper/gi,'')
+            .trim();
 
         console.log('CLEANED:', cleaned);
 
@@ -49,7 +51,9 @@ class Tweet {
             "Just walked"
         ];
 
-        if(cleaned.toLowerCase().includes('check it out!')) return false;
+        if(cleaned.toLowerCase().includes('check it out!')) {
+            return false;
+        }
 
         return cleaned.length > 0;
 
@@ -64,15 +68,15 @@ class Tweet {
     }
 
     get activityType():string {
-        if (this.source != 'completed_event') {
+        if (this.source !== 'completed_event') {
             return "unknown";
         }
         //TODO: parse the activity type from the text of the tweet
         let cleaned = this.text 
-        .replace(/#RunKeeper/gi, '')
-        .replace(/https?:\/\/\S+/gi, '')
-        .replace(/@runkeeper/gi, '')
-        .trim()
+            .replace(/#RunKeeper/gi, '')
+            .replace(/https?:\/\/\S+/gi, '')
+            .replace(/@runkeeper/gi, '')
+            .trim()
         
         const activities = ["run", "walk", 
             "bike", "cycling", "swim", "hike", 
@@ -89,11 +93,27 @@ class Tweet {
     }
 
     get distance():number {
-        if(this.source != 'completed_event') {
+        if(this.source !== 'completed_event') {
             return 0;
         }
         //TODO: prase the distance from the text of the tweet
-        return 0;
+        
+        let cleaned = this.text
+            .replace(/#RunKeeper/gi, '')
+            .replace(/https?:\/\/\S+/gi, '')
+            .replace(/@runkeeper/gi, '')
+            .trim()
+
+         const match = cleaned.match(/([0-9]+(\.[0-9]+)?)\s*(mi|km)/);
+         if (match) {
+            let value = parseFloat(match[1]);
+            let unit = match[3];
+            if (unit === 'km') {
+                return value / 1.609;
+            }
+            return value;
+         }
+         return 0;
     }
 
     getHTMLTableRow(rowNumber:number):string {

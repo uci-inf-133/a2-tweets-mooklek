@@ -68,7 +68,24 @@ class Tweet {
             return "unknown";
         }
         //TODO: parse the activity type from the text of the tweet
-        return "";
+        let cleaned = this.text 
+        .replace(/#RunKeeper/gi, '')
+        .replace(/https?:\/\/\S+/gi, '')
+        .replace(/@runkeeper/gi, '')
+        .trim()
+        
+        const activities = ["run", "walk", 
+            "bike", "cycling", "swim", "hike", 
+            "yoga", "workout", "elliptical", "ski", 
+            "snowboard", "row", "kayak"];
+
+        for (let activity of activities) {
+            if (cleaned.toLowerCase().includes(activity)) {
+                return activity;
+            }
+        }
+
+        return "other";
     }
 
     get distance():number {

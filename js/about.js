@@ -19,21 +19,25 @@ function parseTweets(runkeeper_tweets) {
 		});
 	};
 
+	// if tweet exists then format, find earliest and latest tweet date
 	if (tweet_array.length > 0) {
 		const dates = tweet_array.map(t => new Date(t.time));
 		const earliestDate = new Date(Math.min(...dates));
 		const latestDate = new Date(Math.max(...dates));
 		const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
 		
+		// edit dom to correctly display earliest and latest tweet.
 		document.getElementById('firstDate').innerText = earliestDate.toLocaleDateString(undefined, options);
 		document.getElementById('lastDate').innerText = latestDate.toLocaleDateString(undefined, options);
-	}
+	}	
+		// calculating counts for each category
 		const completedCount = tweet_array.filter(t => t.source === 'completed_event').length;
 		const liveCount = tweet_array.filter(t => t.source === 'live_event').length;
 		const achievementCount = tweet_array.filter(t => t.source === 'achievement').length;
 		const miscCount = tweet_array.filter(t => t.source === 'miscellaneous').length;
 		const writtenCount = tweet_array.filter(t => t.source === 'completed_event' && t.written).length;
 
+		// calculating percentages for each category
 		const completedPercent = math.format((completedCount / tweet_array.length) * 100, {notation: 'fixed', precision: 2});
 		const livePercent = math.format((liveCount / tweet_array.length) * 100, {notation: 'fixed', precision: 2});
 		const achievementPercent = math.format((achievementCount / tweet_array.length) * 100, {notation: 'fixed', precision: 2});
@@ -42,6 +46,7 @@ function parseTweets(runkeeper_tweets) {
 		? '0.00'
 		: math.format((writtenCount / completedCount) * 100, {notation: 'fixed', precision: 2});	
 
+		// logs in console to see if counts are correct
 		console.log('Completed:', completedCount);
 		console.log('Live:', liveCount);
 		console.log('Achievement:', achievementCount);

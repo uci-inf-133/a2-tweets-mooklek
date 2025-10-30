@@ -60,11 +60,27 @@ class Tweet {
     }
 
     get writtenText():string {
-        if(!this.written) {
+        if (!this.written) {
             return "";
         }
-        //TODO: parse the written text from the tweet
-        return "";
+        let cleaned = this.text
+            .replace(/#RunKeeper/gi, '')
+            .replace(/https?:\/\/\S+/gi, '')
+            .replace(/@runkeeper/gi, '')
+            .trim();
+        const defaultPhrases = [
+            "Just completed",
+            "Just posted",
+            "Just finished",
+            "Just ran",
+            "Just cycled",
+            "Just walked"
+        ];
+        for (let phrase of defaultPhrases) {
+            cleaned = cleaned.replace(new RegExp(phrase, 'gi'), '').trim();
+        }
+        cleaned = cleaned.replace(/check it out!/gi, '').trim();
+        return cleaned;
     }
 
     get activityType():string {
@@ -116,8 +132,15 @@ class Tweet {
          return 0;
     }
 
-    getHTMLTableRow(rowNumber:number):string {
-        //TODO: return a table row which summarizes the tweet with a clickable link to the RunKeeper activity
-        return "<tr></tr>";
+    getHTMLTableRow(rowNumber: number): string {
+        const linkMatch = this.text.match(/https?:\/\/\S+/);
+        const link = linkMatch ? linkMatch[0] : "#";
+        const safeText = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        return `<tr>
+            <td>${rowNumber}</td>
+            <td>${this.activityType}</td>
+            <td>${link !== "#" ? `<a href="${link}" target="_blank">Link</a>` : ""}</td>
+            <td>${safeText}</td>
+        </tr>`;
     }
 }

@@ -32,11 +32,15 @@ function parseTweets(runkeeper_tweets) {
 		const liveCount = tweet_array.filter(t => t.source === 'live_event').length;
 		const achievementCount = tweet_array.filter(t => t.source === 'achievement').length;
 		const miscCount = tweet_array.filter(t => t.source === 'miscellaneous').length;
+		const writtenCount = tweet_array.filter(t => t.source === 'completed_event' && t.written).length;
 
 		const completedPercent = math.format((completedCount / tweet_array.length) * 100, {notation: 'fixed', precision: 2});
 		const livePercent = math.format((liveCount / tweet_array.length) * 100, {notation: 'fixed', precision: 2});
 		const achievementPercent = math.format((achievementCount / tweet_array.length) * 100, {notation: 'fixed', precision: 2});
 		const miscPercent = math.format((miscCount / tweet_array.length) * 100, {notation: 'fixed', precision: 2});
+		const writtenPercent = completedCount === 0
+		? '0.00'
+		: math.format((writtenCount / completedCount) * 100, {notation: 'fixed', precision: 2});	
 
 		console.log('Completed:', completedCount);
 		console.log('Live:', liveCount);
@@ -51,6 +55,8 @@ function parseTweets(runkeeper_tweets) {
 		setTextByClass('achievementsPct', `${achievementPercent}%`);
 		setTextByClass('miscellaneous', String(miscCount));
 		setTextByClass('miscellaneousPct', `${miscPercent}%`);
+		setTextByClass('written', String(writtenCount));
+		setTextByClass('writtenPct', `${writtenPercent}%`);
 
 }
 

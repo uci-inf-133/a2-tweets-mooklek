@@ -16,7 +16,7 @@ class Tweet {
             return "completed_event";
         }
 
-        if (txt.startsWith("i'm") || txt.includes("currently") || txt.includes("live now")) {
+        if (txt.includes("currently") || txt.includes("live")) {
             return "live_event";
         }
 
@@ -30,7 +30,29 @@ class Tweet {
     //returns a boolean, whether the text includes any content written by the person tweeting.
     get written():boolean {
         //TODO: identify whether the tweet is written
-        return false;
+        if (this.source !== 'completed_event') return false;
+
+        let cleaned = this.text
+        .replace(/#RunKeeper/gi, '')
+        .replace(/https?:\/\/\S+/gi,'')
+        .replace(/@runkeeper/gi,'')
+        .trim();
+
+        console.log('CLEANED:', cleaned);
+
+        const defaultPhrases = [
+            "Just completed",
+            "Just posted",
+            "Just finished",
+            "Just ran",
+            "Just cycled",
+            "Just walked"
+        ];
+
+        if(cleaned.toLowerCase().includes('check it out!')) return false;
+
+        return cleaned.length > 0;
+
     }
 
     get writtenText():string {

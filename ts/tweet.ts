@@ -11,14 +11,14 @@ class Tweet {
         //TODO: identify whether the source is a live event, an achievement, a completed event, or miscellaneous.
         const txt = this.text.toLowerCase();
 
+        // If tweet has keywords that indicates some category, then it will return the category 
         if (txt.startsWith("just completed") || txt.includes("finished") || txt.includes("completed")) {
             return "completed_event";
         }
-
         if (txt.includes("currently") || txt.includes("live")) {
             return "live_event";
         }
-
+       
         if (txt.startsWith("achieved") || txt.includes("goal") || txt.includes("set a new record")) {
             return "achievement";
         }
@@ -38,6 +38,7 @@ class Tweet {
             .replace(/@runkeeper/gi,'')
             .trim();
 
+        // logging to see if successfully cleaned.
         console.log('CLEANED:', cleaned);
 
         const defaultPhrases = [
@@ -49,6 +50,7 @@ class Tweet {
             "Just walked"
         ];
 
+        //returns false if tweet contains keyword that is consistent with all bot messages 
         if(cleaned.toLowerCase().includes('check it out!')) {
             return false;
         }
@@ -66,6 +68,7 @@ class Tweet {
             .replace(/https?:\/\/\S+/gi, '')
             .replace(/@runkeeper/gi, '')
             .trim();
+
         const defaultPhrases = [
             "Just completed",
             "Just posted",
@@ -130,6 +133,7 @@ class Tweet {
          return 0;
     }
 
+    //generates html table row for tweet
     getHTMLTableRow(rowNumber: number): string {
         const linkMatch = this.text.match(/https?:\/\/\S+/);
         const link = linkMatch ? linkMatch[0] : "#";

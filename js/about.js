@@ -47,6 +47,8 @@ function parseTweets(runkeeper_tweets) {
 		console.log('Achievement:', achievementCount);
 		console.log('Miscellaneous:', miscCount)
 
+
+		// edits the DOM to correctly display information on tweet counts and percentages
 		setTextByClass('completedEvents', String(completedCount));
 		setTextByClass('completedEventsPct', `${completedPercent}%`);
 		setTextByClass('liveEvents', String(liveCount));
